@@ -25,5 +25,9 @@ Route::post("/checkout",[\App\Http\Controllers\WebController::class,"placeOrder"
 Route::get("/thank-you/{order}",[\App\Http\Controllers\WebController::class,"thankYou"]);
 Route::get('success-transaction,{order}', [\App\Http\Controllers\WebController::class, 'successTransaction'])->name('successTransaction');
 Route::get('cancel-transaction/{order}', [\App\Http\Controllers\WebController::class, 'cancelTransaction'])->name('cancelTransaction');
-Route::get("/admin",[\App\Http\Controllers\AdminController::class,"dashboard"])->middleware(["auth"]);
-Route::get("/admin/orders",[\App\Http\Controllers\AdminController::class,"orders"])->middleware(["auth"]);
+Route::prefix("/admin")->middleware(["auth","admin"])->group(function (){
+    Route::get("/",[\App\Http\Controllers\AdminController::class,"dashboard"]);
+    Route::get("/orders",[\App\Http\Controllers\AdminController::class,"orders"]);
+    Route::get("/orders/{order}",[\App\Http\Controllers\AdminController::class,"invoice"]);
+    Route::get("/orders/confirm/{order}",[\App\Http\Controllers\AdminController::class,"confirm"]);
+});
